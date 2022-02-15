@@ -1,4 +1,4 @@
-import { Button, Pagination, Stack, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Pagination, Stack, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material';
 import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined';
 import StarIcon from '@mui/icons-material/Star';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -14,6 +14,9 @@ interface Props {
 
 const ToDo: React.FunctionComponent<Props> = (props) => {
     const [currentPage, setCurrentPage] = useState(1);
+    const [entryToBeDeleted, setEntry] = useState('');
+
+    const [open, toggleDialog] = useState(false)
     const totalPages = (): number => {
         return Math.ceil(list.length / 4);
     }
@@ -33,9 +36,41 @@ const ToDo: React.FunctionComponent<Props> = (props) => {
         console.log(v);
     }
 
+    const handleDialogClose = () => {
+        toggleDialog(!open);
+    }
+
+    const handleConfirmYes = () => {
+        deleteClicked(entryToBeDeleted);
+        toggleDialog(!open);
+    }
+
     const { list, starClicked, deleteClicked } = props
+
     return (
         <>
+            <Dialog
+                open={open}
+                onClose={() => { }}
+                aria-labelledby="responsive-dialog-title"
+            >
+                <DialogTitle id="responsive-dialog-title">
+                    {"Are you Sure?"}
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Do you really want to delete this entry?
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button autoFocus onClick={handleConfirmYes}>
+                        Yes
+                    </Button>
+                    <Button onClick={handleDialogClose} autoFocus>
+                        No
+                    </Button>
+                </DialogActions>
+            </Dialog>
             <Table>
                 <TableBody>
                     {
@@ -44,7 +79,7 @@ const ToDo: React.FunctionComponent<Props> = (props) => {
                                 <TableCell style={{ width: '80%' }}><Typography>{element.task}</Typography></TableCell>
 
                                 <TableCell><Button onClick={() => { starClicked(element.task) }}>{element.starred ? <StarIcon></StarIcon> : <StarBorderOutlinedIcon></StarBorderOutlinedIcon>}</Button></TableCell>
-                                <TableCell><Button onClick={() => { deleteClicked(element.task) }}><DeleteIcon></DeleteIcon></Button></TableCell>
+                                <TableCell><Button onClick={() => { toggleDialog(!open); setEntry(element.task) }}><DeleteIcon></DeleteIcon></Button></TableCell>
                             </TableRow>
                         })
                     }
