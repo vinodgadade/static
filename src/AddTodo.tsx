@@ -1,4 +1,4 @@
-import { Alert, Button, Snackbar, TextField } from '@mui/material';
+import { Alert, AlertColor, Button, Snackbar, TextField } from '@mui/material';
 import { ChangeEvent, useState } from 'react';
 
 interface toDo {
@@ -15,26 +15,27 @@ interface Props {
 const AddTodo: React.FunctionComponent<Props> = (props) => {
     const { list, addTask } = props
     const [text, SetText] = useState('')
-    const [snackbarState, toggleSnackbar] = useState(false);
+    const [snackbarState, toggleSnackbar] = useState<{ display: boolean, severity: AlertColor, message: string }>({ display: false, severity: 'info', message: '' });
 
-    const verifyAndAdd = (text: string) => {
+    const verifyAndAdd = (text: string): void => {
         const isPresent = list.some((element) => element.task.trim().toLowerCase() === text.trim().toLowerCase());
         if (isPresent) {
-            toggleSnackbar(true)
+            toggleSnackbar({ display: true, severity: 'error', message: 'To Do already present' })
         } else {
-            addTask(text)
+            addTask(text);
+            toggleSnackbar({ display: true, severity: 'success', message: 'To Do added successfully' })
         }
     }
 
-    const hanldeOnChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const hanldeOnChange = (e: ChangeEvent<HTMLInputElement>): void => {
         SetText(e.target.value)
     }
 
-    const handleClose = () => {
-        toggleSnackbar(false)
+    const handleClose = (): void => {
+        toggleSnackbar({ display: false, severity: 'info', message: '' })
     }
 
-    const handleKeyDown = (e: any) => {
+    const handleKeyDown = (e: any): void => {
         if (e.keyCode === 13) {
             verifyAndAdd(text)
         }
@@ -42,15 +43,16 @@ const AddTodo: React.FunctionComponent<Props> = (props) => {
 
     return (<div className='add-todo'>
         <div className='add-todo-textfieled'>
-            <Snackbar open={snackbarState} autoHideDuration={5000}>
-                <Alert onClose={handleClose} severity="error">
-                    To Do task already added
+            <Snackbar open={snackbarState.display} autoHideDuration={5000}>
+                <Alert onClose={handleClose} severity={snackbarState.severity}>
+                    {snackbarState.message}
                 </Alert>
             </Snackbar>
             <TextField
                 InputProps={{
-                    placeholder: 'Enter To Do to be added',
+                    placeholder: 'Press enter or add to do button to save',
                 }}
+                label={'Enter task to be added'}
                 value={text}
                 onKeyDown={handleKeyDown}
                 onChange={hanldeOnChange}

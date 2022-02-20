@@ -2,7 +2,7 @@ import { Button, Dialog, DialogActions, DialogContent, DialogContentText, Dialog
 import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined';
 import StarIcon from '@mui/icons-material/Star';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { toDo } from './App';
 
 interface Props {
@@ -20,6 +20,7 @@ const ToDo: React.FunctionComponent<Props> = (props) => {
     const totalPages = (): number => {
         return Math.ceil(list.length / 4);
     }
+
     const paginate = (): any => {
         if (props.searched) {
             return list
@@ -31,16 +32,15 @@ const ToDo: React.FunctionComponent<Props> = (props) => {
         }
     }
 
-    const pageClicked = (e: any, v: any) => {
-        setCurrentPage(v)
-        console.log(v);
+    const pageClicked = (e: any, v: any): void => {
+        setCurrentPage(v);
     }
 
-    const handleDialogClose = () => {
+    const handleDialogClose = (): void => {
         toggleDialog(!open);
     }
 
-    const handleConfirmYes = () => {
+    const handleConfirmYes = (): void => {
         deleteClicked(entryToBeDeleted);
         toggleDialog(!open);
     }
@@ -87,7 +87,10 @@ const ToDo: React.FunctionComponent<Props> = (props) => {
             </Table>
             <div className='pagination-holder'>
                 <Stack spacing={2}>
-                    <Pagination count={totalPages()} variant="outlined" shape="rounded" onChange={(e, v) => { pageClicked(e, v) }} />
+                    <Pagination count={totalPages()} variant="outlined" shape="rounded" onChange={(e, v) => {
+                        pageClicked(e,
+                            v)
+                    }} />
                 </Stack>
             </div>
 

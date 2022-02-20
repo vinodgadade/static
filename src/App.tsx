@@ -1,4 +1,4 @@
-import { InputAdornment, Table, TextField } from '@mui/material';
+import { InputAdornment, TextField } from '@mui/material';
 import { ChangeEvent, useState } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import './App.css';
@@ -23,6 +23,8 @@ const App: React.FunctionComponent = () => {
   const [todoList, updateTodoList] = useState(sortData(data))
 
   const starClicked = (task: string): void => {
+    console.log('im clucjedfsdbfasfojz');
+    
     const index = todoList.findIndex((element) => element.task === task)
     todoList[index] = {
       task: todoList[index].task,
@@ -38,6 +40,9 @@ const App: React.FunctionComponent = () => {
     updateTodoList(todoList.filter(function (element) {
       return element.task !== task;
     }))
+    setSearchData(searchdeData.filter(function (element) {
+      return element.task !== task;
+    }));
   }
 
   const addTask = (task: string): void => {
@@ -46,7 +51,7 @@ const App: React.FunctionComponent = () => {
 
   const search = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.value === '') {
-      toggleSearch(false)
+      toggleSearch(false);
     } else {
       if (!searchEnabled)
         toggleSearch(true)
@@ -60,30 +65,34 @@ const App: React.FunctionComponent = () => {
   return (
     <div className='app-container'>
       <div className='header'>
-        To Do APP
-      </div>
-      <div className='content margin' >
+        <div className='title'>
+          To Do APP
+        </div>
         <div className='search' >
           <TextField
             InputProps={{
               placeholder: 'search',
               startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon />
+                <InputAdornment position="start" >
+                  <SearchIcon/>
                 </InputAdornment>
               ),
             }}
+            color='primary'
             onChange={search}
-            fullWidth>
-
+            fullWidth
+            style={{color: 'white !important'}}
+            >
           </TextField>
 
         </div>
+
+
+      </div>
+      <div className='content margin' >
+
         <AddTodo list={todoList} addTask={addTask}></AddTodo>
         <ToDo list={searchEnabled ? searchdeData : todoList} searched={searchEnabled} starClicked={starClicked} deleteClicked={deleteClicked}></ToDo>
-        <Table>
-
-        </Table>
       </div>
     </div>
   );

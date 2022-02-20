@@ -16,10 +16,18 @@ body {
 .header {
   display: flex;
   align-items: center;
-  justify-content: center;
-  background-color: #1976d2;
+  justify-content: space-between;
+  background-color: #89afd4;
   color: white;
-  height: 5% !important;
+  padding: 0.5%;
+}
+
+.title{
+  width: 10%;
+  color: black;
+}
+.search {
+  flex: 1;
 }
 
 .content {
